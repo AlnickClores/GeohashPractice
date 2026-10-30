@@ -35,11 +35,11 @@ namespace DeveloperNotes.Services
 
             await _db.GeoAddAsync(UserKey, request.Coordinates.Longitude, request.Coordinates.Latitude, request.Name);
 
-            //await _db.HashSetAsync($"target:{request.Name}", new HashEntry[]
-            //{
-            //    new("name", request.Name),
-            //    new("location", $"{request.Coordinates.Longitude},{request.Coordinates.Latitude}")
-            //});
+            await _db.HashSetAsync($"target:{request.Name}", new HashEntry[]
+            {
+                new("name", request.Name),
+                new("location", $"{request.Coordinates.Longitude},{request.Coordinates.Latitude}")
+            });
 
             return new UserAndLocationResponse()
             {
@@ -87,12 +87,9 @@ namespace DeveloperNotes.Services
                 "LIMIT", "0", request.Limit.ToString()
             );
 
-            Console.WriteLine("FT.AGGREGATE executed");
-
             var response = (RedisResult[])results;
             RedisResult[]? resultRows = null;
 
-            // Find the "results" array in the Redis response.
             for (var i = 0; i + 1 < response.Length; i += 2)
             {
                 if (response[i].ToString() == "results")
@@ -104,8 +101,7 @@ namespace DeveloperNotes.Services
 
             if (resultRows == null)
             {
-                throw new InvalidOperationException(
-                    "Redis response does not contain a results array.");
+                throw new InvalidOperationException("Redis response does not contain a results array.");
             }
 
             Console.WriteLine($"Returned rows: {resultRows.Length}");

@@ -41,3 +41,4 @@ C:\Users\AlnickBClores\source\repos\DeveloperNotes\DeveloperNotes\obj\Debug\net1
 C:\Users\AlnickBClores\source\repos\DeveloperNotes\DeveloperNotes\obj\Debug\net10.0\DeveloperNotes.pdb
 C:\Users\AlnickBClores\source\repos\DeveloperNotes\DeveloperNotes\obj\Debug\net10.0\DeveloperNotes.genruntimeconfig.cache
 C:\Users\AlnickBClores\source\repos\DeveloperNotes\DeveloperNotes\obj\Debug\net10.0\ref\DeveloperNotes.dll
+C:\Users\AlnickBClores\source\repos\DeveloperNotes\DeveloperNotes\obj\Debug\net10.0\DeveloperNotes.sourcelink.json
