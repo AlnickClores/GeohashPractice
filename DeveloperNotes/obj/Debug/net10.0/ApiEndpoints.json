@@ -1,0 +1,82 @@
+[
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "AddTargetAndLocation",
+    "RelativePath": "api/geohash/AddTargetAndLocation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.AddUserAndLocationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "AddUserAndLocation",
+    "RelativePath": "api/geohash/AddUserAndLocation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.AddUserAndLocationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "GetGeohash",
+    "RelativePath": "api/geohash/GetGeohash",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.GeohashRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "GetNearbyUsers",
+    "RelativePath": "api/geohash/GetNearbyUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.NearbyUsersRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Program\u002B\u003C\u003Ec",
+    "Method": "\u003C\u003CMain\u003E$\u003Eb__0_2",
+    "RelativePath": "redis-test",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

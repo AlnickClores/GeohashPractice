@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path="compose.yaml" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="DeveloperNotes/DeveloperNotes.csproj" />
+</Solution>
