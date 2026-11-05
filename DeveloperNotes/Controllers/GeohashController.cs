@@ -11,16 +11,35 @@ namespace DeveloperNotes.Controllers
     {
         private readonly GeohashService _geohashService = geohashService;
 
-        [HttpPost("AddUserAndLocation")]
-        public async Task<IActionResult> AddUserAndLocation([FromBody] AddUserAndLocationRequest request, CancellationToken ct)
+        [HttpPost("collectors")]
+        public async Task<IActionResult> AddCollector([FromBody] CreateCollectorRequest request, CancellationToken ct)
         {
             try
             {
-                var result = await _geohashService.AddUserAndLocation(request, ct);
+                var result = await _geohashService.AddCollector(request, ct);
 
                 return Ok(new
                 {
-                    Message = "User and location added successfully.",
+                    Message = "User added successfully.",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("targets")]
+        public async Task<IActionResult> AddTarget([FromBody] CreateTargetRequest request, CancellationToken ct)
+        {
+            try
+            {
+                var result = await _geohashService.AddTarget(request, ct);
+
+                return Ok(new
+                {
+                    Message = "Target added successfully.",
                     Data = result
                 });
             }
@@ -31,16 +50,16 @@ namespace DeveloperNotes.Controllers
 
         }
 
-        [HttpPost("AddTargetAndLocation")]
-        public async Task<IActionResult> AddTargetAndLocation([FromBody] AddUserAndLocationRequest request, CancellationToken ct)
+        [HttpGet("targets/{targetId}/nearby-collectors")]
+        public async Task<IActionResult> GetNearbyCollectors([FromBody] NearbyCollectorsRequest request, CancellationToken ct)
         {
             try
             {
-                var result = await _geohashService.AddTargetAndLocation(request, ct);
+                var result = await _geohashService.GetNearbyCollectors(request, ct);
 
                 return Ok(new
                 {
-                    Message = "Target and location added successfully.",
+                    Message = "Nearby collectors fetched successfully.",
                     Data = result
                 });
             }
@@ -51,16 +70,16 @@ namespace DeveloperNotes.Controllers
 
         }
 
-        [HttpGet("GetNearbyUsers")]
-        public async Task<IActionResult> GetNearbyUsers([FromBody] NearbyUsersRequest request, CancellationToken ct)
+        [HttpPost("targets/{targetId}/assign")]
+        public async Task<IActionResult> AssignTarget(string targetId, [FromBody] AssignTargetRequest request, CancellationToken ct)
         {
             try
             {
-                var result = await _geohashService.GetNearbyUsers(request, ct);
+                var result = await _geohashService.AssignTarget(targetId, request, ct);
 
                 return Ok(new
                 {
-                    Message = "Nearby users fetched successfully.",
+                    Message = "Target assigned successfully.",
                     Data = result
                 });
             }
@@ -68,7 +87,6 @@ namespace DeveloperNotes.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpGet("GetGeohash")]

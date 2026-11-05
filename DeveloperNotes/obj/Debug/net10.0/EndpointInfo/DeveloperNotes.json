@@ -25,7 +25,7 @@
         }
       }
     },
-    "/api/geohash/AddUserAndLocation": {
+    "/api/geohash/collectors": {
       "post": {
         "tags": [
           "GeoHash"
@@ -34,17 +34,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateCollectorRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateCollectorRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateCollectorRequest"
               }
             }
           },
@@ -57,7 +57,7 @@
         }
       }
     },
-    "/api/geohash/AddTargetAndLocation": {
+    "/api/geohash/targets": {
       "post": {
         "tags": [
           "GeoHash"
@@ -66,17 +66,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateTargetRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateTargetRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserAndLocationRequest"
+                "$ref": "#/components/schemas/CreateTargetRequest"
               }
             }
           },
@@ -89,26 +89,78 @@
         }
       }
     },
-    "/api/geohash/GetNearbyUsers": {
+    "/api/geohash/targets/{targetId}/nearby-collectors": {
       "get": {
         "tags": [
           "GeoHash"
         ],
+        "parameters": [
+          {
+            "name": "targetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NearbyUsersRequest"
+                "$ref": "#/components/schemas/NearbyCollectorsRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/NearbyUsersRequest"
+                "$ref": "#/components/schemas/NearbyCollectorsRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/NearbyUsersRequest"
+                "$ref": "#/components/schemas/NearbyCollectorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/geohash/targets/{targetId}/assign": {
+      "post": {
+        "tags": [
+          "GeoHash"
+        ],
+        "parameters": [
+          {
+            "name": "targetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignTargetRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignTargetRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignTargetRequest"
               }
             }
           },
@@ -156,27 +208,14 @@
   },
   "components": {
     "schemas": {
-      "AddUserAndLocationRequest": {
-        "required": [
-          "name",
-          "coordinates"
-        ],
+      "AssignTargetRequest": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "coordinates": {
-            "$ref": "#/components/schemas/Coordinates"
-          },
-          "currentWorkload": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "collectorId": {
             "type": [
               "null",
-              "integer",
               "string"
-            ],
-            "format": "int32"
+            ]
           }
         }
       },
@@ -205,6 +244,36 @@
           }
         }
       },
+      "CreateCollectorRequest": {
+        "required": [
+          "name",
+          "coordinates"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Coordinates"
+          }
+        }
+      },
+      "CreateTargetRequest": {
+        "required": [
+          "name",
+          "coordinates"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Coordinates"
+          }
+        }
+      },
       "GeohashRequest": {
         "required": [
           "keyType",
@@ -220,25 +289,16 @@
           }
         }
       },
-      "NearbyUsersRequest": {
+      "NearbyCollectorsRequest": {
         "required": [
-          "coordinates"
+          "targetId"
         ],
         "type": "object",
         "properties": {
-          "coordinates": {
-            "$ref": "#/components/schemas/Coordinates"
+          "targetId": {
+            "type": "string"
           },
-          "limit": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "distanceRadius": {
+          "radiusKm": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "null",

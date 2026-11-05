@@ -7,44 +7,61 @@ namespace DeveloperNotes.Services
     {
         private readonly IDatabase _db = db;
 
-        public async Task<UserAndLocationResponse> AddUserAndLocation(AddUserAndLocationRequest request, CancellationToken ct)
+        public static class GeohashConstants
         {
-            const string UserKey = "users:locations";
-            string formattedName = $"user:{request.Name}";
+            public const int MAX_WORKLOAD = 5;
+            public const int DEFAULT_NEARBY_COLLECTORS_LIMIT = 3;
+        }
 
-            await _db.GeoAddAsync(UserKey, request.Coordinates.Longitude, request.Coordinates.Latitude, formattedName);
+        public async Task<CreateCollectorResponse> AddCollector(CreateCollectorRequest request, CancellationToken ct)
+        {
+            var collectorId = Guid.NewGuid().ToString();
 
-            await _db.HashSetAsync($"user:{request.Name}", new HashEntry[]
+            var key = $"collector:{collectorId}";
+
+            await _db.HashSetAsync(key, new HashEntry[]
             {
+                new("id", collectorId),
                 new("name", request.Name),
+                new("latitude", request.Coordinates.Latitude),
+                new("longitude", request.Coordinates.Longitude),
                 new("location", $"{request.Coordinates.Longitude},{request.Coordinates.Latitude}"),
-                new("workload", request.CurrentWorkload)
+                new("workload", 0)
             });
 
-            return new UserAndLocationResponse()
+            return new CreateCollectorResponse()
             {
+                CollectorId = collectorId,
                 Name = request.Name,
                 Coordinates = request.Coordinates,
-                CurrentWorkload = request.CurrentWorkload
+                CurrentWorkload = 0
             };
         }
 
-        public async Task<UserAndLocationResponse> AddTargetAndLocation(AddUserAndLocationRequest request, CancellationToken ct)
+        public async Task<CreateTargetResponse> AddTarget(CreateTargetRequest request, CancellationToken ct)
         {
-            const string UserKey = "targets:locations";
+            var targetId = Guid.NewGuid().ToString();
 
-            await _db.GeoAddAsync(UserKey, request.Coordinates.Longitude, request.Coordinates.Latitude, request.Name);
+            var key = $"target:{targetId}";
 
-            await _db.HashSetAsync($"target:{request.Name}", new HashEntry[]
+            await _db.HashSetAsync(key, new HashEntry[]
             {
+                new("id", targetId),
                 new("name", request.Name),
-                new("location", $"{request.Coordinates.Longitude},{request.Coordinates.Latitude}")
+                new("latitude", request.Coordinates.Latitude),
+                new("longitude", request.Coordinates.Longitude),
+                new("location", $"{request.Coordinates.Longitude},{request.Coordinates.Latitude}"),
+                new("isAssigned", false),
+                new("assignedUserId", "")
             });
 
-            return new UserAndLocationResponse()
+            return new CreateTargetResponse()
             {
+                TargetId = targetId,
                 Name = request.Name,
-                Coordinates = request.Coordinates
+                Coordinates = request.Coordinates,
+                IsAssigned = false,
+                AssignedUserId = null
             };
         }
 
@@ -54,37 +71,57 @@ namespace DeveloperNotes.Services
         // APPLY "0.6 * (1 / (1 + @distanceKm)) + 0.4 * (1 - (@workload / 100))" AS score
         // SORTBY 2 @score DESC LIMIT 5
 
-
-        public async Task<List<UserAndLocationResponse>> GetNearbyUsers(
-            NearbyUsersRequest request,
-            CancellationToken ct)
+        public async Task<List<NearbyCollectorsResponse>> GetNearbyCollectors(NearbyCollectorsRequest request, CancellationToken ct)
         {
-            var longitude = request.Coordinates.Longitude;
-            var latitude = request.Coordinates.Latitude;
-            var radius = request.DistanceRadius;
+            var targetKey = $"target:{request.TargetId}";
+            var targetData = await _db.HashGetAllAsync(targetKey);
 
-            var query = string.Format(
-                System.Globalization.CultureInfo.InvariantCulture,
-                $"@location:[{longitude} {latitude} {radius} km]",
-                longitude,
-                latitude);
+            if (targetData.Length == 0)
+            {
+                throw new KeyNotFoundException($"Target with ID '{request.TargetId}' was not found.");
+            }
+
+            var target = targetData.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+            var longitude = double.Parse(target["longitude"], System.Globalization.CultureInfo.InvariantCulture);
+
+            var latitude = double.Parse(target["latitude"], System.Globalization.CultureInfo.InvariantCulture);
+
+            var targetDetails = new TargetDetails
+            {
+                TargetId = request.TargetId,
+                Name = target["name"],
+                Coordinates = new Coordinates
+                {
+                    Longitude = longitude,
+                    Latitude = latitude
+                }
+            };
+
+            if (request.RadiusKm <= 0)
+            {
+                throw new ArgumentException("Radius must be greater than zero.");
+            }
+
+            var query = FormattableString.Invariant($"@location:[{longitude} {latitude} {request.RadiusKm} km]");
 
             var results = await _db.ExecuteAsync(
                 "FT.AGGREGATE",
-                "idx:users",
+                "idx:collectors",
                 query,
-                "LOAD", "3", "@name", "@location", "@workload",
+                "LOAD", "4",
+                "@id", "@name", "@location", "@workload",
                 "APPLY", $"geodistance(@location, {longitude}, {latitude}) / 1000",
                 "AS", "distanceKm",
-                "FILTER", "@workload < 10",
-                "APPLY", $"1 - (@distanceKm / {radius})",
+                "FILTER", $"@workload < {GeohashConstants.MAX_WORKLOAD}",
+                "APPLY", $"1 - (@distanceKm / {request.RadiusKm})",
                 "AS", "distanceScore",
-                "APPLY", "1 - (@workload / 10)",
+                "APPLY", $"1 - (@workload / {GeohashConstants.MAX_WORKLOAD})",
                 "AS", "availabilityScore",
                 "APPLY", "0.5 * @distanceScore + 0.5 * @availabilityScore",
                 "AS", "score",
                 "SORTBY", "2", "@score", "DESC",
-                "LIMIT", "0", request.Limit.ToString()
+                "LIMIT", "0", GeohashConstants.DEFAULT_NEARBY_COLLECTORS_LIMIT.ToString()
             );
 
             var response = (RedisResult[])results;
@@ -104,9 +141,8 @@ namespace DeveloperNotes.Services
                 throw new InvalidOperationException("Redis response does not contain a results array.");
             }
 
-            Console.WriteLine($"Returned rows: {resultRows.Length}");
-
-            var nearbyUsers = new List<UserAndLocationResponse>();
+            var nearbyUsers = new List<NearbyCollectorsResponse>();
+            var rank = 1;
 
             foreach (var row in resultRows)
             {
@@ -123,115 +159,122 @@ namespace DeveloperNotes.Services
                 }
 
                 if (attributes == null)
-                {
-                    Console.WriteLine("Skipped row: extra_attributes not found.");
                     continue;
-                }
 
                 var values = new Dictionary<string, string>();
 
                 for (var i = 0; i + 1 < attributes.Length; i += 2)
                 {
-                    values[attributes[i].ToString()] =
-                        attributes[i + 1].ToString();
+                    values[attributes[i].ToString()] = attributes[i + 1].ToString();
                 }
 
-                if (!values.TryGetValue("name", out var name) ||
-                    !values.TryGetValue("location", out var location) ||
-                    !values.TryGetValue("workload", out var workloadText))
-                {
-                    Console.WriteLine("Skipped row: required user data missing.");
-                    continue;
-                }
+                var locationParts = values["location"].Split(',');
 
-                var locationParts = location.Split(',');
+                var userLongitude = double.Parse(locationParts[0], System.Globalization.CultureInfo.InvariantCulture);
 
-                if (locationParts.Length != 2)
-                {
-                    Console.WriteLine($"Invalid location: {location}");
-                    continue;
-                }
+                var userLatitude = double.Parse(locationParts[1], System.Globalization.CultureInfo.InvariantCulture);
 
-                if (!double.TryParse(
-                        locationParts[0],
-                        System.Globalization.NumberStyles.Float,
-                        System.Globalization.CultureInfo.InvariantCulture,
-                        out var userLongitude) ||
-                    !double.TryParse(
-                        locationParts[1],
-                        System.Globalization.NumberStyles.Float,
-                        System.Globalization.CultureInfo.InvariantCulture,
-                        out var userLatitude))
-                {
-                    Console.WriteLine($"Invalid coordinates: {location}");
-                    continue;
-                }
+                var workload = int.Parse(values["workload"], System.Globalization.CultureInfo.InvariantCulture);
 
-                if (!int.TryParse(workloadText, out var workload))
+                nearbyUsers.Add(new NearbyCollectorsResponse
                 {
-                    Console.WriteLine($"Invalid workload: {workloadText}");
-                    continue;
-                }
+                    Rank = rank++,
+                    DistanceKm = double.Parse(values["distanceKm"], System.Globalization.CultureInfo.InvariantCulture),
+                    Score = double.Parse(values["score"], System.Globalization.CultureInfo.InvariantCulture),
 
-                nearbyUsers.Add(new UserAndLocationResponse
-                {
-                    Name = name,
-                    Coordinates = new Coordinates
+                    CollectorDetails = new CollectorDetails
                     {
-                        Longitude = userLongitude,
-                        Latitude = userLatitude
+                        CollectorId = values["id"],
+                        Name = values["name"],
+                        Coordinates = new Coordinates
+                        {
+                            Longitude = userLongitude,
+                            Latitude = userLatitude
+                        },
+                        CurrentWorkload = workload
                     },
-                    CurrentWorkload = workload
+
+                    TargetDetails = targetDetails
                 });
             }
-
-            Console.WriteLine($"Parsed users: {nearbyUsers.Count}");
 
             return nearbyUsers;
         }
 
-
-
-
-        public async Task<UserAndLocationResponse> GetUserOrTargetLocation(string name)
+        public async Task<AssignTargetResponse> AssignTarget(string targetId, AssignTargetRequest request, CancellationToken ct)
         {
-            var userKey = $"user:{name}";
-            var targetKey = $"target:{name}";
-            var userExists = await _db.KeyExistsAsync(userKey);
-            var targetExists = await _db.KeyExistsAsync(targetKey);
+            var targetKey = $"target:{targetId}";
+            var collectorKey = $"collector:{request.CollectorId}";
+            var collectorTargetsKey = $"collector:{request.CollectorId}:targets";
 
-            if (!userExists && !targetExists)
+            const string script = """
+                local targetExists = redis.call('EXISTS', KEYS[1])
+                local collectorExists = redis.call('EXISTS', KEYS[2])
+
+                if targetExists == 0 then
+                    return {0, 'Target not found'}
+                end
+
+                if collectorExists == 0 then
+                    return {0, 'Collector not found'}
+                end
+
+                local isAssigned = redis.call('HGET', KEYS[1], 'isAssigned')
+
+                if isAssigned == 'true' then
+                    return {0, 'Target is already assigned'}
+                end
+
+                local workload = tonumber(redis.call('HGET', KEYS[2], 'workload') or '0')
+
+                if workload >= tonumber(ARGV[1]) then
+                    return {0, 'Collector has reached maximum workload'}
+                end
+
+                local updatedWorkload = workload + 1
+
+                redis.call('HSET', KEYS[1],
+                    'isAssigned', 'true',
+                    'assignedUserId', ARGV[2])
+
+                redis.call('HSET', KEYS[2],
+                    'workload', updatedWorkload)
+
+                redis.call('SADD', KEYS[3], ARGV[3])
+
+                return {
+                    1,
+                    updatedWorkload,
+                    redis.call('HGET', KEYS[1], 'name'),
+                    redis.call('HGET', KEYS[2], 'name')
+                }
+                """;
+
+            var result = (RedisResult[])await _db.ScriptEvaluateAsync(script, new RedisKey[]
             {
-                throw new Exception($"User or target '{name}' not found.");
+                targetKey, collectorKey, collectorTargetsKey
+            }, new RedisValue[]
+            {
+                GeohashConstants.MAX_WORKLOAD, request.CollectorId, targetId
+            });
+
+            var status = (int)result[0];
+
+            if (status == 0)
+            {
+                var message = result[1].ToString();
+
+                throw new InvalidOperationException(message);
             }
 
-            var keyToUse = userExists ? userKey : targetKey;
-            var hashEntries = await _db.HashGetAllAsync(keyToUse);
-            var locationEntry = hashEntries.FirstOrDefault(entry => entry.Name == "location");
-            var workloadEntry = hashEntries.FirstOrDefault(entry => entry.Name == "workload");
-
-            if (locationEntry.Equals(new HashEntry()))
+            return new AssignTargetResponse
             {
-                throw new Exception($"Location for '{name}' not found.");
-            }
-
-            var locationParts = locationEntry.Value.ToString().Split(',');
-            var coordinates = new Coordinates
-            {
-                Longitude = double.Parse(locationParts[0]),
-                Latitude = double.Parse(locationParts[1])
-            };
-
-            int? workload = null;
-            if (workloadEntry != null && workloadEntry.Value.HasValue)
-            {
-                workload = (int)workloadEntry.Value;
-            }
-            return new UserAndLocationResponse
-            {
-                Name = name,
-                Coordinates = coordinates,
-                CurrentWorkload = workload
+                TargetId = targetId,
+                TargetName = result[2].ToString(),
+                CollectorId = request.CollectorId,
+                Name = result[3].ToString(),
+                UpdatedWorkload = (int)result[1],
+                IsAssigned = true
             };
         }
 
@@ -247,19 +290,6 @@ namespace DeveloperNotes.Services
             }
 
             return geohash;
-        }
-
-        private double CalculateFinalScore(double distanceKm, int assignedTargets)
-        {
-            const int SEARCH_RADIUS = 25;
-            const int MAX_WORKLOAD = 10;
-
-            var DistanceScore = 1 - (distanceKm / SEARCH_RADIUS);
-            var WorkloadScore = 1 - (assignedTargets / MAX_WORKLOAD);
-
-            var FinalScore = 0.6 * DistanceScore + 0.4 * WorkloadScore;
-
-            return FinalScore;
         }
     }
 }

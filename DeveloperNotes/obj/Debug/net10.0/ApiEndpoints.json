@@ -1,31 +1,15 @@
 [
   {
     "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
-    "Method": "AddTargetAndLocation",
-    "RelativePath": "api/geohash/AddTargetAndLocation",
+    "Method": "AddCollector",
+    "RelativePath": "api/geohash/collectors",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "DeveloperNotes.DTOs.AddUserAndLocationRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
-    "Method": "AddUserAndLocation",
-    "RelativePath": "api/geohash/AddUserAndLocation",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "DeveloperNotes.DTOs.AddUserAndLocationRequest",
+        "Type": "DeveloperNotes.DTOs.CreateCollectorRequest",
         "IsRequired": true
       }
     ],
@@ -49,15 +33,57 @@
   },
   {
     "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
-    "Method": "GetNearbyUsers",
-    "RelativePath": "api/geohash/GetNearbyUsers",
+    "Method": "AddTarget",
+    "RelativePath": "api/geohash/targets",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.CreateTargetRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "AssignTarget",
+    "RelativePath": "api/geohash/targets/{targetId}/assign",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "targetId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DeveloperNotes.DTOs.AssignTargetRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "GetNearbyCollectors",
+    "RelativePath": "api/geohash/targets/{targetId}/nearby-collectors",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "DeveloperNotes.DTOs.NearbyUsersRequest",
+        "Type": "DeveloperNotes.DTOs.NearbyCollectorsRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "targetId",
+        "Type": "",
         "IsRequired": true
       }
     ],
