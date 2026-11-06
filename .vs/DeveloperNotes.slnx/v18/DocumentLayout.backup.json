@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\dtos\\geohashdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\dtos\\geohashdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\services\\geohashservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\services\\geohashservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\dtos\\geohashdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\dtos\\geohashdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\controllers\\geohashcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,16 +27,8 @@
       "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\dtos\\createnotedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{089100B1-113F-4E66-888A-E83F3999EAFD}|Solution Items{089100B1-113F-4E66-888A-E83F3999EAFD}|C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{089100B1-113F-4E66-888A-E83F3999EAFD}|Solution Items{089100B1-113F-4E66-888A-E83F3999EAFD}|solutionrelative:.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|c:\\users\\alnickbclores\\source\\repos\\developernotes\\developernotes\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{01FF6C64-0E16-95D7-9653-5F7B46A6D381}|DeveloperNotes\\DeveloperNotes.csproj|solutionrelative:developernotes\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{089100B1-113F-4E66-888A-E83F3999EAFD}|Solution Items{089100B1-113F-4E66-888A-E83F3999EAFD}|C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\compose.yaml||{06C066C6-04A2-4E5D-8202-439FD4234EF1}",
@@ -53,8 +53,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 2003,
-          "SelectedChildIndex": 10,
+          "DockedWidth": 1783,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -86,19 +86,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\appsettings.json",
               "RelativeDocumentMoniker": "DeveloperNotes\\appsettings.json",
               "ToolTip": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\appsettings.json",
               "RelativeToolTip": "DeveloperNotes\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-07-06T08:26:05.125Z"
+              "WhenOpened": "2026-07-06T08:26:05.125Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "GeohashController.cs",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\Controllers\\GeohashController.cs",
               "RelativeDocumentMoniker": "DeveloperNotes\\Controllers\\GeohashController.cs",
@@ -106,11 +107,25 @@
               "RelativeToolTip": "DeveloperNotes\\Controllers\\GeohashController.cs",
               "ViewState": "AgIAAFQAAAAAAAAAAAAowGAAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-28T03:17:51.366Z"
+              "WhenOpened": "2026-10-28T03:17:51.366Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "GeoHashDto.cs",
+              "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\DTOs\\GeoHashDto.cs",
+              "RelativeDocumentMoniker": "DeveloperNotes\\DTOs\\GeoHashDto.cs",
+              "ToolTip": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\DTOs\\GeoHashDto.cs",
+              "RelativeToolTip": "DeveloperNotes\\DTOs\\GeoHashDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-28T03:20:57.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CreateNoteDto.cs",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\DTOs\\CreateNoteDto.cs",
               "RelativeDocumentMoniker": "DeveloperNotes\\DTOs\\CreateNoteDto.cs",
@@ -122,20 +137,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GeoHashDto.cs",
-              "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\DTOs\\GeoHashDto.cs",
-              "RelativeDocumentMoniker": "DeveloperNotes\\DTOs\\GeoHashDto.cs",
-              "ToolTip": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\DTOs\\GeoHashDto.cs",
-              "RelativeToolTip": "DeveloperNotes\\DTOs\\GeoHashDto.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAApwFUAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-28T03:20:57.14Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": ".dockerignore",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\.dockerignore",
               "RelativeDocumentMoniker": ".dockerignore",
@@ -196,8 +198,8 @@
           ]
         },
         {
-          "DockedWidth": 2009,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 2229,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -205,28 +207,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "GeohashService.cs",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\Services\\GeohashService.cs",
               "RelativeDocumentMoniker": "DeveloperNotes\\Services\\GeohashService.cs",
               "ToolTip": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\Services\\GeohashService.cs",
               "RelativeToolTip": "DeveloperNotes\\Services\\GeohashService.cs",
-              "ViewState": "AgIAABkBAAAAAAAAAAAmwCsBAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-28T05:44:19.958Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\Program.cs",
               "RelativeDocumentMoniker": "DeveloperNotes\\Program.cs",
               "ToolTip": "C:\\Users\\AlnickBClores\\source\\repos\\DeveloperNotes\\DeveloperNotes\\Program.cs",
               "RelativeToolTip": "DeveloperNotes\\Program.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAADIAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-06T08:29:55.628Z"
+              "WhenOpened": "2026-07-06T08:29:55.628Z",
+              "EditorCaption": ""
             }
           ]
         }

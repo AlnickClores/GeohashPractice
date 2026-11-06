@@ -30,7 +30,20 @@ builder.Services.AddSingleton<IDatabase>(sp => sp.GetRequiredService<IConnection
 
 builder.Services.AddSingleton<GeohashService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactFrontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowReactFrontend");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
