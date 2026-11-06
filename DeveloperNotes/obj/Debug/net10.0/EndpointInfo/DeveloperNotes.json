@@ -87,6 +87,16 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "GeoHash"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/geohash/targets/{targetId}/nearby-collectors": {

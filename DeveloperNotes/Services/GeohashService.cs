@@ -278,6 +278,47 @@ namespace DeveloperNotes.Services
             };
         }
 
+        public async Task<List<TargetsResponse>> GetTargets(CancellationToken ct)
+        {
+            var targets = new List<TargetsResponse>();
+
+            var endpoint = _db.Multiplexer.GetEndPoints().First();
+            var server = _db.Multiplexer.GetServer(endpoint);
+
+            var targetKeys = server.Keys(database: _db.Database, pattern: "target:*");
+
+            foreach (var key in targetKeys)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var targetData = await _db.HashGetAllAsync(key);
+
+                if (targetData.Length == 0) continue;
+
+                var data = targetData.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+                targets.Add(new TargetsResponse
+                {
+                    TargetId = data.TryGetValue("id", out var id) ? id : key.ToString()["target:".Length..],
+
+                    Name = data["name"],
+
+                    Coordinates = new Coordinates
+                    {
+                        Longitude = double.Parse(data["longitude"], System.Globalization.CultureInfo.InvariantCulture),
+
+                        Latitude = double.Parse(data["latitude"], System.Globalization.CultureInfo.InvariantCulture)
+                    },
+
+                    IsAssigned = data["isAssigned"] == "1" || data["isAssigned"].Equals("true", StringComparison.OrdinalIgnoreCase),
+
+                    AssignedUserId = data.TryGetValue("assignedUserId", out var userId) && !string.IsNullOrWhiteSpace(userId) ? userId : null
+                });
+            }
+
+            return targets;
+        }
+
         public async Task<string> GetGeohash(GeohashRequest request)
         {
             var key = request.KeyType == "user" ? "users:locations" : "targets:locations";

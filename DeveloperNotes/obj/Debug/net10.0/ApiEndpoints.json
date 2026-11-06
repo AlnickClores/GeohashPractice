@@ -49,6 +49,16 @@
   },
   {
     "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "GetTargets",
+    "RelativePath": "api/geohash/targets",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
     "Method": "AssignTarget",
     "RelativePath": "api/geohash/targets/{targetId}/assign",
     "HttpMethod": "POST",

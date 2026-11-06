@@ -89,6 +89,25 @@ namespace DeveloperNotes.Controllers
             }
         }
 
+        [HttpGet("targets")]
+        public async Task<IActionResult> GetTargets(CancellationToken ct)
+        {
+            try
+            {
+                var result = await _geohashService.GetTargets(ct);
+
+                return Ok(new
+                {
+                    Message = "Targets fetched successfully.",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("GetGeohash")]
         public async Task<IActionResult> GetGeohash([FromBody] GeohashRequest request, CancellationToken ct)
         {
