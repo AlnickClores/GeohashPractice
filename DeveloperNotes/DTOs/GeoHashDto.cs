@@ -2,8 +2,8 @@
 {
     public class Coordinates
     {
-        public required double Latitude { get; set; }
         public required double Longitude { get; set; }
+        public required double Latitude { get; set; }
     }
 
     public class CreateCollectorRequest
@@ -84,6 +84,7 @@
     {
         public string TargetId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public required string Address { get; set; }
         public Coordinates Coordinates { get; set; } = null!;
         public bool IsAssigned { get; set; }
         public string? AssignedUserId { get; set; }
