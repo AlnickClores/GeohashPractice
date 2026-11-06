@@ -84,7 +84,6 @@
     {
         public string TargetId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public required string Address { get; set; }
         public Coordinates Coordinates { get; set; } = null!;
         public bool IsAssigned { get; set; }
         public string? AssignedUserId { get; set; }
