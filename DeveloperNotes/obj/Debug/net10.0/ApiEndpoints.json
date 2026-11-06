@@ -17,6 +17,16 @@
   },
   {
     "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
+    "Method": "GetCollectors",
+    "RelativePath": "api/geohash/collectors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DeveloperNotes.Controllers.GeoHashController",
     "Method": "GetGeohash",
     "RelativePath": "api/geohash/GetGeohash",
     "HttpMethod": "GET",
@@ -101,7 +111,7 @@
   },
   {
     "ContainingType": "Program\u002B\u003C\u003Ec",
-    "Method": "\u003C\u003CMain\u003E$\u003Eb__0_2",
+    "Method": "\u003C\u003CMain\u003E$\u003Eb__0_3",
     "RelativePath": "redis-test",
     "HttpMethod": "GET",
     "IsController": false,

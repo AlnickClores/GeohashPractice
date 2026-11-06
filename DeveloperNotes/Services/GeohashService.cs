@@ -319,6 +319,94 @@ namespace DeveloperNotes.Services
             return targets;
         }
 
+        public async Task<List<CollectorsResponse>> GetCollectors(CancellationToken ct)
+        {
+            var collectors = new List<CollectorsResponse>();
+
+            var endpoint = _db.Multiplexer.GetEndPoints().First();
+            var server = _db.Multiplexer.GetServer(endpoint);
+
+            var collectorKeys = server.Keys(database: _db.Database, pattern: "collector:*");
+
+            foreach (var key in collectorKeys)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var keyType = await _db.KeyTypeAsync(key);
+
+                if (keyType != RedisType.Hash) continue;
+
+                var collectorData = await _db.HashGetAllAsync(key);
+
+                if (collectorData.Length == 0) continue;
+
+                var data = collectorData.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+                var collectorId = data.TryGetValue("id", out var id) ? id : key.ToString()["collector:".Length..];
+
+                var collectorTargetsKey = $"collector:{collectorId}:targets";
+
+                var targetIds = await _db.SetMembersAsync(collectorTargetsKey);
+
+                var assignedTargets = new List<AssignedTargetResponse>();
+
+                foreach (var targetIdValue in targetIds)
+                {
+                    ct.ThrowIfCancellationRequested();
+
+                    var targetId = targetIdValue.ToString();
+                    var targetKey = $"target:{targetId}";
+
+                    var targetData = await _db.HashGetAllAsync(targetKey);
+
+                    if (targetData.Length == 0) continue;
+
+                    var target = targetData.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+                    assignedTargets.Add(new AssignedTargetResponse
+                    {
+                        TargetId = target.TryGetValue("id", out var targetIdFromHash) ? targetIdFromHash : targetId,
+
+                        Name = target["name"],
+
+                        Coordinates = new Coordinates
+                        {
+                            Longitude = double.Parse(target["longitude"], System.Globalization.CultureInfo.InvariantCulture),
+
+                            Latitude = double.Parse(target["latitude"], System.Globalization.CultureInfo.InvariantCulture)
+                        }
+                    });
+                }
+
+                collectors.Add(new CollectorsResponse
+                {
+                    CollectorId = collectorId,
+
+                    Name = data["name"],
+
+                    Coordinates = new Coordinates
+                    {
+                        Longitude = double.Parse(data["longitude"], System.Globalization.CultureInfo.InvariantCulture),
+
+                        Latitude = double.Parse(data["latitude"], System.Globalization.CultureInfo.InvariantCulture)
+                    },
+
+                    IsAssigned = data.TryGetValue("isAssigned", out var isAssigned) &&
+                        (isAssigned == "1" ||
+                         isAssigned.Equals("true", StringComparison.OrdinalIgnoreCase)),
+
+                    AssignedUserId = data.TryGetValue("assignedUserId", out var userId)
+                        && !string.IsNullOrWhiteSpace(userId)
+                            ? userId
+                            : null,
+
+                    AssignedTargets = assignedTargets
+                });
+            }
+
+            return collectors;
+        }
+
         public async Task<string> GetGeohash(GeohashRequest request)
         {
             var key = request.KeyType == "user" ? "users:locations" : "targets:locations";

@@ -89,6 +89,24 @@
         public string? AssignedUserId { get; set; }
     }
 
+    public class CollectorsResponse
+    {
+        public string CollectorId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public Coordinates Coordinates { get; set; } = null!;
+        public bool IsAssigned { get; set; }
+        public string? AssignedUserId { get; set; }
+
+        public List<AssignedTargetResponse> AssignedTargets { get; set; } = new();
+    }
+
+    public class AssignedTargetResponse
+    {
+        public string TargetId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public Coordinates Coordinates { get; set; } = null!;
+    }
+
     public class GeohashRequest
     {
         public required string KeyType { get; set; }
